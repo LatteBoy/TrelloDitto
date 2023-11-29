@@ -18,7 +18,10 @@ export const getTodosGroupedByColumn = async() => {
             })
         }
 
-        acc.get(todo.status)!.todos.push({
+        const columnEntry = acc.get(todo.status)!;
+
+        // Push a new todo object into the todos array of the current column
+        columnEntry.todos.push({
             $id: todo.$id,
             $createdAt: todo.$createdAt,
             title: todo.title,
@@ -29,7 +32,9 @@ export const getTodosGroupedByColumn = async() => {
 
         return acc;
     }, new Map<TypedColumn, Column>)
-
+    
+    
+    // if columns doesn't have inProgress, Todo and Done, add them with empty Todos
     const columnTypes: TypedColumn[] = ["todo", "inprogress", "done"];
     for (const columnType of columnTypes) {
         if (!columns.get(columnType)) {
